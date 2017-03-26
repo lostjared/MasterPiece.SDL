@@ -9,3 +9,6 @@ How to play
 Use the arrow keys to move the blocks, press A or S to change the order
 line up 3 in a row going horizontal, vertical or diagonal to clear a line
 last as long as you can before the grid fills up.
+
+![ScreenShot](https://github.com/lostjared/MasterPiece.SDL/blob/master/mp-startscreen.png?raw=true "screenshot")
+![ScreenShot](https://github.com/lostjared/MasterPiece.SDL/blob/master/mp-gameplay.png?raw=true "screenshot")
