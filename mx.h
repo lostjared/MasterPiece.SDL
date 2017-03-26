@@ -523,6 +523,7 @@ public:
         SDL_Surface *surface = TTF_RenderText_Solid(Font, str, color);
         SDL_Rect rc = {x,y,surface->w, surface->h};
         SDL_BlitSurface(surface, 0, mx->pscr, &rc);
+        SDL_FreeSurface(surface);
     }
     
 };
