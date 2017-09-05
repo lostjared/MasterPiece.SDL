@@ -113,7 +113,7 @@ public:
     
     void clear()
     {
-        SDL_Rect rect = {0, 0, pscr->w, pscr->h};
+        SDL_Rect rect = {0, 0, (Uint16)pscr->w, (Uint16)pscr->h};
         SDL_FillRect(pscr, &rect, 0);
     }
     
@@ -521,7 +521,7 @@ public:
     {
         SDL_Color color = {255,255,255};
         SDL_Surface *surface = TTF_RenderText_Solid(Font, str, color);
-        SDL_Rect rc = {x,y,surface->w, surface->h};
+        SDL_Rect rc = {(Sint16)x,(Sint16)y,(Uint16)surface->w, (Uint16)surface->h};
         SDL_BlitSurface(surface, 0, mx->pscr, &rc);
         SDL_FreeSurface(surface);
     }
@@ -533,7 +533,7 @@ class mxPaint : public mxObject {
 public:
     void drawRect(int x, int y, int x2, int y2, Uint32 color)
     {
-        SDL_Rect rect = {x, y, x2, y2};
+        SDL_Rect rect = {(Sint16)x, (Sint16)y, (Uint16)x2, (Uint16)y2};
         SDL_FillRect(mx->pscr, &rect, color);
     }
 };
