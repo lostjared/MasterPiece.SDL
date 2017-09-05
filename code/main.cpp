@@ -29,7 +29,7 @@ class Intro {
 	mxSprite start_scr;
 	time_t tha_time, ntime;
 	int wait;
-	int clock_pos,curc_pos,twait;
+	int clock_pos;
 public:
 
 	void init()

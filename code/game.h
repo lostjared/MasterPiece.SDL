@@ -518,8 +518,7 @@ public:
 		int STARTPOSX = STARTX;
 		int STARTPOSY = STARTY;
 		int x = STARTPOSX,y = STARTPOSY;
-		static int c_counter = 1;
-
+	
 		for(int i = 0; i < 17; i++)
 		{
 
