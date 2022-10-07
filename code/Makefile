@@ -1,10 +1,18 @@
-all: mpsdl
+OBJ=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
-main.o: main.cpp
-	$(CXX) -Wall -std=c++98  -I/usr/local/include -g -c `sdl-config --cflags` main.cpp
+CFLAGS= -std=c++98 `sdl-config --cflags`
+LDFLAGS= `sdl-config --libs` -lSDL_ttf
+PROGRAM=MasterPiece.SDL
 
-mpsdl: main.o 
-	$(CXX) -g -std=c++98 `sdl-config --libs` -lSDL_ttf `pkg-config freetype2 --libs`  main.o -o mpsdl
+%.o: %.cpp
+	$(CXX) $(CFLAGS) $< -c -o $@
 
+per.test: $(OBJ)
+	$(CXX) -o $(PROGRAM)  $(OBJ) $(LDFLAGS)
+
+all: example
+
+.PHONY: clean clear
 clean:
-	rm -f *.o mpsdl
+	rm -f $(PROGRAM)  *.o
+
