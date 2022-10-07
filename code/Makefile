@@ -7,10 +7,10 @@ PROGRAM=MasterPiece.SDL
 %.o: %.cpp
 	$(CXX) $(CFLAGS) $< -c -o $@
 
-per.test: $(OBJ)
+$(PROGRAM): $(OBJ)
 	$(CXX) -o $(PROGRAM)  $(OBJ) $(LDFLAGS)
 
-all: example
+all: $(PROGRAM)
 
 .PHONY: clean clear
 clean:
