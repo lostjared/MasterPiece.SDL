@@ -520,7 +520,7 @@ public:
     void printText(int x, int y, const char *str)
     {
         
-        if(strlen(str) == 0)
+        if(str == NULL || strlen(str) == 0)
             return;
         
         SDL_Color color = {255,255,255};
