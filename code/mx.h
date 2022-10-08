@@ -519,6 +519,10 @@ public:
     }
     void printText(int x, int y, const char *str)
     {
+        
+        if(strlen(str) == 0)
+            return;
+        
         SDL_Color color = {255,255,255};
         SDL_Surface *surface = TTF_RenderText_Solid(Font, str, color);
         SDL_Rect rc = {(Sint16)x,(Sint16)y,(Uint16)surface->w, (Uint16)surface->h};
