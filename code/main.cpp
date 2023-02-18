@@ -56,7 +56,6 @@ public:
 		}
 
 		logo.display(&mxhwnd, 0, 0);
-		font.printText(10,10, "Press Enter to Continue.. \n");
 		ntime = time(0);
 		if(ntime > tha_time)
 		{
@@ -72,8 +71,6 @@ public:
 
 	void free()
 	{
-		logo.~mxSprite();
-		start_scr.~mxSprite();
 	}
 };
 
@@ -439,15 +436,15 @@ void keydown(int key)
 		{
 			switch(key)
 			{
-			case 273:
+			case SDLK_UP:
 				if(pstart.cursor_pos > 0)
 					pstart.cursor_pos--;
 				break;
-			case 274:
+			case SDLK_DOWN:
 				if(pstart.cursor_pos < 3)
 					pstart.cursor_pos++;
 				break;
-			case 13:
+			case SDLK_RETURN:
 				switch(pstart.cursor_pos)
 				{
 				case 0:
@@ -480,15 +477,15 @@ void keydown(int key)
 		case 27:
 			mxhwnd.setScreen(START);
 			break;
-		case 273:
+		case SDLK_UP:
 			if(pstart.options.cur_pos > 0)
 				pstart.options.cur_pos--;
 			break;
-		case 274:
+		case SDLK_DOWN:
 			if(pstart.options.cur_pos < 1)
 				pstart.options.cur_pos++;
 			break;
-		case 275:
+		case SDLK_RIGHT:
 			switch(pstart.options.cur_pos)
 			{
 			case 0:
@@ -503,7 +500,7 @@ void keydown(int key)
 				break;
 			}
 			break;
-		case 276:
+		case SDLK_LEFT:
 			switch(pstart.options.cur_pos)
 			{
 			case 0:
@@ -518,7 +515,7 @@ void keydown(int key)
 				break;
 			}
 			break;
-		case 13:
+		case SDLK_RETURN:
 			linenum = pstart.options.lines;
 			unload();
 			//if(mxhwnd.isFullScreen() != pstart.options.full_scr)
@@ -589,8 +586,7 @@ void render(int screen)
 		game.update();
 		break;
 	}
-	SDL_Flip(mxhwnd.pscr);
-
+	SDL_UpdateWindowSurface(mxhwnd.window);
 }
 
 void load(int scr)
@@ -610,8 +606,7 @@ void load(int scr)
 }
 
 void unload()
-{
-	font.~mxFont(); // 
+{ 
 	pstart.free(); //  
 	intro.free();
 	game.free();

@@ -24,32 +24,19 @@ class mxHwnd {
     int is_fullscreen;
     
 public:
+
+    SDL_Window *window; 
     
     ~mxHwnd() {
         
         //SDL_FreeSurface(pscr);
-        SDL_Quit();
+        //SDL_Quit();
     }
     SDL_Surface *pscr;
     
     
     int setfullscreen(int fullscreen,const char *title, int width, int height, int bpp)
     {
-        SDL_FreeSurface(pscr);
-        if(fullscreen == 0)
-            pscr = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE|SDL_ANYFORMAT|SDL_FULLSCREEN);
-        else
-            pscr = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE|SDL_ANYFORMAT);
-        
-        if(!pscr)
-        {
-            fprintf(stderr, "Couldn't create a surface: %s\n",SDL_GetError());
-            return -1;
-        }
-        SDL_WM_SetCaption(title, NULL);
-        printf("Successfully initalized\n");
-        scr = 0;
-        is_fullscreen = fullscreen;
         return 0;
     }
     
@@ -61,20 +48,15 @@ public:
     int init(const char *title, int width, int height, int bpp, bool fullscreen)
     {
         
-        atexit(SDL_Quit);
-        
-        if(fullscreen == true)
-            pscr = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE|SDL_ANYFORMAT|SDL_FULLSCREEN);
+        atexit(SDL_Quit);        
+
+        if(is_fullscreen)
+            window = SDL_CreateWindow("MasterPiece", 0, 0, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
         else
-            pscr = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE|SDL_ANYFORMAT);
-        
-        if(!pscr)
-        {
-            fprintf(stderr, "Couldn't create a surface: %s\n",SDL_GetError());
-            return -1;
-        }
-        SDL_WM_SetCaption(title, NULL);
-        printf("Successfully initalized\n");
+            window = SDL_CreateWindow("MasterPiece", 0, 0, 640, 480, SDL_WINDOW_SHOWN);
+
+        pscr = SDL_GetWindowSurface(window);
+
         scr = 0;
         
         keyfunc = 0,keyfuncup = 0,mousemove = 0,mousedown = 0,onevent = 0,exitok = 1;
@@ -444,7 +426,7 @@ public:
             fprintf(stderr, "Unable to load bitmap ..%s", str);
             return false;
         }
-        SDL_SetColorKey(sptr , SDL_SRCCOLORKEY,SDL_MapRGB(sptr->format, r,g,b));
+        SDL_SetColorKey(sptr , SDL_TRUE, SDL_MapRGB(sptr->format, r,g,b));
         
         return true;
     }
@@ -490,7 +472,9 @@ public:
     
     mxFont()
     {
-        TTF_Init();
+        if(TTF_WasInit() == 0)
+            TTF_Init();
+        
         Font = TTF_OpenFont("img/arial.ttf", 14);
         if(!Font) {
             fprintf(stderr, "Error opening font..\n");
@@ -502,8 +486,6 @@ public:
     {
         if(Font != 0)
             TTF_CloseFont(Font);
-        
-        TTF_Quit();
     }
     
     void load(mxHwnd *mx, const char *sfont)
@@ -517,19 +499,19 @@ public:
         }
         
     }
-    void printText(int x, int y, const char *str)
-    {
-        
-        if(str == NULL || strlen(str) == 0)
-            return;
-        
+    void printText(int x, int y, const char *str) {
+
+        if(str == NULL)
+            return;  
+
         SDL_Color color = {255,255,255};
         SDL_Surface *surface = TTF_RenderText_Solid(Font, str, color);
-        SDL_Rect rc = {(Sint16)x,(Sint16)y,(Uint16)surface->w, (Uint16)surface->h};
-        SDL_BlitSurface(surface, 0, mx->pscr, &rc);
-        SDL_FreeSurface(surface);
+        if(surface != NULL) {
+            SDL_Rect rc = {(Sint16)x,(Sint16)y,(Uint16)surface->w, (Uint16)surface->h};
+            SDL_BlitSurface(surface, 0, mx->pscr, &rc);
+            SDL_FreeSurface(surface);
+        }
     }
-    
 };
 
 class mxPaint : public mxObject {

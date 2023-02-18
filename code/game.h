@@ -380,7 +380,8 @@ public:
 							draweffect(i,j);
 							draweffect(i,j+1);
 							draweffect(i,j+2);
-							SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+							//SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+							SDL_UpdateWindowSurface(mxhwnd.window);
 						}
 						return;
 					}
@@ -410,7 +411,7 @@ public:
 							draweffect(q,z);
 							draweffect(q+1,z);
 							draweffect(q+2,z);
-							SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+							SDL_UpdateWindowSurface(mxhwnd.window);
 						}
 						return;
 					}
@@ -440,7 +441,7 @@ public:
 							draweffect(w,p);
 							draweffect(w+1,p+1);
 							draweffect(w+2,p+2);
-							SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+							SDL_UpdateWindowSurface(mxhwnd.window);
 						}
 					}
 					if( w-2 >= 0 && p-2 >= 0)
@@ -457,7 +458,7 @@ public:
 								draweffect(w,p);
 								draweffect(w-1,p-1);
 								draweffect(w-2,p-2);
-								SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+								SDL_UpdateWindowSurface(mxhwnd.window);
 							}
 						}
 
@@ -477,7 +478,7 @@ public:
 								draweffect(w,p);
 								draweffect(w-1,p+1);
 								draweffect(w-2,p+2);
-								SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+								SDL_UpdateWindowSurface(mxhwnd.window);
 							}
 						}
 
@@ -497,7 +498,7 @@ public:
 								draweffect(w,p);
 								draweffect(w+1,p-1);
 								draweffect(w+2,p-2);
-								SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+								SDL_UpdateWindowSurface(mxhwnd.window);
 							}
 						}
 
@@ -569,7 +570,7 @@ public:
 	{
 		switch(wParam)
 		{
-		case 276:
+		case SDLK_LEFT:
 			if( matrix.block.x >= 1)
 			{
 
@@ -583,7 +584,7 @@ public:
 
 			}
 			break;
-		case 275:
+		case SDLK_RIGHT:
 			if( matrix.block.x < 7)
 			{
 
@@ -597,7 +598,7 @@ public:
 
 			}
 			break;
-		case 274:
+		case SDLK_DOWN:
 			//	grid.HandleInput(wParam);
 			if( matrix.Tiles [ matrix.block.y + 3 ][ matrix.block.x ] == 0 && matrix.block.y + 3 < 15 )
 			{
@@ -611,6 +612,7 @@ public:
 
 			}
 			break;
+		case SDLK_UP:
 		case 'A':
 		case 'a':
 			matrix.block.color.shiftcolor(true);
