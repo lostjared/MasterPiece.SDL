@@ -1,15 +1,10 @@
-# MasterPiece.SDL
+# MasterPiece.SDL Overview:
 
-This is one of the first games I wrote a very long time ago. It was originally for Windows98 written using C++/DirectX. 
-Later on it was ported to SDL. I know I spelled the name of the game wrong in the logo screen but kept it so it looks
-like the original. I know its spelled "Masterpiece" lol.
+This project represents one of my initial forays into game development, crafted many years ago. Initially designed for Windows 98 using C++ and DirectX, it was subsequently adapted to utilize SDL. An intentional misspelling is present in the game's logo screen—retained to preserve the original's charm—I'm aware it should be "Masterpiece."
 
-How to play
+Gameplay Instructions:
 
-Use the arrow keys to move the blocks, press A or S to change the order
-line up 3 in a row going horizontal, vertical or diagonal to clear a line
-last as long as you can before the grid fills up.
-
+Navigate the blocks using the arrow keys. To rearrange the blocks, press A or S. Your goal is to align at least three blocks in a horizontal, vertical, or diagonal sequence to clear a line. The challenge is to prevent the grid from becoming completely filled by lasting as long as possible.
 ![ScreenShot](https://github.com/lostjared/MasterPiece.SDL/blob/master/mp-startscreen.png?raw=true "screenshot")
 
 
