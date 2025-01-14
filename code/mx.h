@@ -51,9 +51,9 @@ public:
         atexit(SDL_Quit);        
 
         if(is_fullscreen)
-            window = SDL_CreateWindow("MasterPiece", 0, 0, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+            window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
         else
-            window = SDL_CreateWindow("MasterPiece", 0, 0, 640, 480, SDL_WINDOW_SHOWN);
+            window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
 
         pscr = SDL_GetWindowSurface(window);
 

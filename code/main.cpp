@@ -17,8 +17,7 @@ int linenum = 10;
 const char *getPath(const char *str)
 {
 	static char t[255];
-	getcwd(t,255);
-	sprintf(stemp,"%s/%s", t, str);
+	sprintf(stemp,"%s/%s", ".", str);
 	return stemp;
 }
 
