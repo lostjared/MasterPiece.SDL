@@ -58,6 +58,10 @@ public:
         pscr = SDL_GetWindowSurface(window);
 
         scr = 0;
+	
+	SDL_Surface *ico = SDL_LoadBMP("./img/block_red.bmp");
+	SDL_SetWindowIcon(window, ico);
+	SDL_FreeSurface(ico);
         
         keyfunc = 0,keyfuncup = 0,mousemove = 0,mousedown = 0,onevent = 0,exitok = 1;
         is_fullscreen = (int)fullscreen;
