@@ -17,11 +17,11 @@ make -j4
 TO run the  program copy exe andd resource directory to folder
 
 ```bash
-mkdir MasterPiece
-cp MasterPiece.SDL MasterPiece/
-cp -rf ../img MasterPiece/img/
-cd MasterPiece
-./MasterPiece.SDL
+mkdir MasterPiece_SDL
+cp MasterPiece MasterPiece_SDL/
+cp -rf ../img/ MasterPiece_SDL/mg/
+cd MasterPiece_SDL
+./MasterPiece
 ```
 
 ![image](https://github.com/user-attachments/assets/c33f737f-91e1-41d3-8be7-fff46d421872)
