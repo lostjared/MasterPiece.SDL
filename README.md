@@ -19,7 +19,7 @@ TO run the  program copy exe andd resource directory to folder
 ```bash
 mkdir MasterPiece_SDL
 cp MasterPiece MasterPiece_SDL/
-cp -rf ../img/ MasterPiece_SDL/mg/
+cp -rf ../img/ MasterPiece_SDL/img/
 cd MasterPiece_SDL
 ./MasterPiece
 ```
