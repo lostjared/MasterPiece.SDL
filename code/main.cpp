@@ -94,7 +94,7 @@ public:
         std::ostringstream stream;
         stream << "Amount of Lines Until Speed increase: " << lines;
 		font.printText(70,90,stream.str().c_str());
-        strean,str("");
+        stream,str("");
 		stream <<  "Toggle FullScreen: " << (full_scr == 0 ? "On" : "Off");
 		font.printText(70,120,stream.str().c_str());
 		switch(cur_pos)
