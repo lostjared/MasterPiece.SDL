@@ -16,9 +16,9 @@ int linenum = 10;
 
 const char *getPath(const char *str)
 {
-	static char t[255];
-	sprintf(stemp,"%s/%s", ".", str);
-	return stemp;
+    static char t[255];
+	snprintf(stemp, 250, "%s/%s", ".", str);
+    return stemp;
 }
 
 
@@ -91,11 +91,11 @@ public:
 	void update()
 	{
 		paint.drawRect(35,82,621-35,440-70, 0x0);
-		char chr[255];
-		sprintf(chr, "Amount of Lines Until Speed increase: %d", lines);
-		font.printText(70,90,chr);
-		sprintf(chr, "Toggle FullScreen : %s", full_scr == 0 ? "On" : "Off");
-		font.printText(70,120,chr);
+        std::ostringstream stream;
+        stream << "Amount of Lines Until Speed increase: " << lines;
+		font.printText(70,90,stream.str().c_str());
+		stream <<  "Toggle FullScreen: " << (full_scr == 0 ? "On" : "Off");
+		font.printText(70,120,stream.str().c_str());
 		switch(cur_pos)
 		{
 		case 0:
@@ -194,17 +194,18 @@ public:
 		font.printText(45,90, "High Scores");
 		for(int p = 0; p < 8; p++)
 		{
-			sprintf(dat,"%d) %s: %d", (p+1), score.data[p].user_name, score.data[p].score);
-			font.printText(45,start_y,dat);
+            std::ostringstream stream;
+            stream << p+1 << ") " << score.data[p].user_name << ": " << score.data[p].score;
+			font.printText(45,start_y,stream.str().c_str());
 			start_y += 20;
 		}
 
 		if(in_score == true)
 		{
-			char dat[255];
-			sprintf(dat,"%s%s", user_name, rand()%5 > 3 ? "_" : "");
-			font.printText(280,120,"Input Name: ");
-			font.printText(420,120,dat);
+            std::ostringstream stream;
+            stream << user_name << ((rand()%5 > 3 ? "_" : ""));
+            font.printText(280,120,"Input Name: ");
+			font.printText(420,120,stream.str().c_str());
 		}
 		else
 			font.printText(280,120,"Press Enter to continue...");

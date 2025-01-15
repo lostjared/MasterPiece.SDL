@@ -308,11 +308,12 @@ public:
 		gbg.display(0,0);
 		drawmatrix();
 		drawblock();
-		char temp[255];
-		sprintf(temp, "Score: %i", (int)matrix.Game.score);
-		font.printText(200,60,temp);
-		sprintf(temp, "Tabs: %d", matrix.Game.lines);
-		font.printText(310,60,temp);
+        std::ostringstream stream;
+        stream << "Score: " << matrix.Game.score;
+		font.printText(200,60,stream.str().c_str());
+        stream.str("");
+		stream << "Tabs: " << matrix.Game.lines;
+		font.printText(310,60,stream.str().c_str());
 	}
 
 	inline void logic()

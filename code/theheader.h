@@ -13,7 +13,7 @@ extern void gameover();
 #include<cstdlib>
 #include<ctime>
 #include<fstream>
-
+#include<sstream>
 using namespace std;
 
 #ifndef _WIN32
