@@ -6,7 +6,7 @@
 mxHwnd mxhwnd;
 mxFont  font;
 mxPaint paint;
-
+mxHwnd *mxHwnd::mxhwnd_static = &mxhwnd;
 char stemp[280];
 
 void load(int scr);
@@ -17,7 +17,11 @@ int linenum = 10;
 const char *getPath(const char *str)
 {
     static char t[255];
+#ifndef __EMSCRIPTEN__
 	snprintf(stemp, 250, "%s/%s", ".", str);
+#else
+	snprintf(stemp, 224, "/assets/%s", str);
+#endif
     return stemp;
 }
 
@@ -363,27 +367,25 @@ void mousemove(int x, int y)
 	switch(mxhwnd.getScreen())
 	{
 	case START:
-		if(x > 250 && x < 500 && y > 170 && y < 235)
+		if(x > 375 && x < 750 && y > 255 && y < 352)
 		{
 			pstart.cursor_pos = 0;
 		}
 
-		if(x > 250 && x < 618 && y > 265 && y < 320)
+		if(x > 375 && x < 927 && y > 397 && y < 480)
 		{
 			pstart.cursor_pos = 1;
 		}
 
-		if(x > 250 && x < 580 && y > 326 && y < 380)
+		if(x > 375 && x < 870 && y > 489 && y < 570)
 		{
 			pstart.cursor_pos = 2;
 		}
 
-		if(x > 250 && x < 580 && y > 394 && y < 440)
+		if(x > 375 && x < 870 && y > 591 && y < 660)
 		{
 			pstart.cursor_pos = 3;
 		}
-
-
 		break;
 	}
 
@@ -565,6 +567,7 @@ void onevent(SDL_Event *e)
 	}
 }
 
+
 void render(int screen)
 {
 	switch(screen)
@@ -587,6 +590,7 @@ void render(int screen)
 		game.update();
 		break;
 	}
+	SDL_BlitScaled(mxhwnd.pscr, 0, SDL_GetWindowSurface(mxhwnd.window), 0);
 	SDL_UpdateWindowSurface(mxhwnd.window);
 }
 

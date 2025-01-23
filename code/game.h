@@ -14,7 +14,6 @@ void getcords(int r, int c, int& rx, int& ry)
 	int STARTPOSX = STARTX;
 	int STARTPOSY = STARTY;
 	int x = STARTPOSX,y = STARTPOSY;
-
 	for(int i = 0; i < 17; i++)
 	{
 		for(int j = 0; j < 8; j++)
