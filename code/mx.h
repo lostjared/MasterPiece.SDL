@@ -49,9 +49,9 @@ public:
     int init(const char *title, int width, int height, int bpp, bool fullscreen)
     {
         if(is_fullscreen)
-            window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+            window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
         else
-            window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 720, SDL_WINDOW_SHOWN);
+            window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
 
 
         SDL_Surface *temp = SDL_GetWindowSurface(window);

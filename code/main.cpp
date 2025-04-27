@@ -94,7 +94,7 @@ public:
 
 	void update()
 	{
-		paint.drawRect(35,82,621-35,440-70, 0x0);
+		paint.drawRect(35,82,621-35,440-70, SDL_MapRGBA(mxhwnd.pscr->format, 0, 0, 0, 255));
         std::ostringstream stream;
         stream << "Amount of Lines Until Speed increase: " << lines;
 		font.printText(70,90,stream.str().c_str());
@@ -125,7 +125,7 @@ public:
 	}
 	void update()
 	{
-		paint.drawRect(35,82,621-35,440-70,0x0);
+		paint.drawRect(35,82,621-35,440-70, SDL_MapRGBA(mxhwnd.pscr->format, 0, 0, 0,255));
 		font.printText(40,100,"MpSDL is written in C++ / SDL - SDL_ttf");
 		font.printText(40,120,"This program is free. ");
 		font.printText(40,140,"Click or Press Escape to Return");
@@ -193,7 +193,7 @@ public:
 
 	void update()
 	{
-		paint.drawRect(35,82,621-35,440-70,0x0);
+		paint.drawRect(35,82,621-35,440-70,SDL_MapRGBA(mxhwnd.pscr->format, 0, 0,0, 255));
 		int start_y = 120;
 		char dat[1024];
 		font.printText(45,90, "High Scores");
@@ -619,7 +619,15 @@ void unload()
 
 int main(int argc, char *argv[])
 {
-	if(mxhwnd.init("MpSDL", 640,480,32, false) != -1)
+
+	int width = 1440, height = 1080;
+
+	if(argc == 4 && std::string(argv[1]) == "size") {
+		width = atoi(argv[2]);
+		height = atoi(argv[3]);
+	}
+
+	if(mxhwnd.init("MasterPiece", width,height,32, false) != -1)
 	{
 		srand((int)time(0));
 		load(INTRO);
