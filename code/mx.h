@@ -26,8 +26,8 @@ class mxHwnd {
     int is_fullscreen;
     
 public:
-
-    SDL_Window *window; 
+    
+    SDL_Window *window;
     
     ~mxHwnd() {
         SDL_FreeSurface(pscr);
@@ -52,16 +52,16 @@ public:
             window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
         else
             window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
-
-
+        
+        
         SDL_Surface *temp = SDL_GetWindowSurface(window);
         SDL_Surface* new_surface = SDL_CreateRGBSurfaceWithFormat(0,640,480,temp->format->BitsPerPixel,temp->format->format);
         pscr = new_surface;
         scr = 0;
-	
-	    SDL_Surface *ico = SDL_LoadBMP("./img/block_red.bmp");
-	    SDL_SetWindowIcon(window, ico);
-	    SDL_FreeSurface(ico);
+        
+        SDL_Surface *ico = SDL_LoadBMP("./img/block_red.bmp");
+        SDL_SetWindowIcon(window, ico);
+        SDL_FreeSurface(ico);
         
         keyfunc = 0,keyfuncup = 0,mousemove = 0,mousedown = 0,onevent = 0,exitok = 1;
         is_fullscreen = (int)fullscreen;
@@ -102,19 +102,19 @@ public:
         SDL_Rect rect = {0, 0, (Uint16)pscr->w, (Uint16)pscr->h};
         SDL_FillRect(pscr, &rect, 0);
     }
-
+    
     static mxHwnd *mxhwnd_static;
-
+    
     static void eventProc() {
         mxhwnd_static->loop();
     }
     
     SDL_Event event;
-
+    
     void loop() {
         
         
-
+        
         if(scr != 5)
             clear();
         
@@ -188,7 +188,7 @@ public:
                 onevent(&event);
         }
     }
-
+    
     int initLoop(void (*rendery)(int screen))
     {
         renderscr = rendery;
@@ -198,8 +198,8 @@ public:
             loop();
         }
 #else
-    emscripten_set_main_loop(mxHwnd::eventProc, 0, 1);
-#endif        
+        emscripten_set_main_loop(mxHwnd::eventProc, 0, 1);
+#endif
         return 1;
     }
     
@@ -514,10 +514,10 @@ public:
         
     }
     void printText(int x, int y, const char *str) {
-
+        
         if(str == NULL)
-            return;  
-
+            return;
+        
         SDL_Color color = {255,255,255};
         SDL_Surface *surface = TTF_RenderText_Solid(Font, str, color);
         if(surface != NULL) {
