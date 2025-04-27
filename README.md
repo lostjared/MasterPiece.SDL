@@ -14,7 +14,7 @@ cmake ..
 make -j4
 ```
 
-TO run the  program copy exe andd resource directory to folder
+TO run the  program copy exe and resource directories to the folder
 
 ```bash
 mkdir MasterPiece_SDL
@@ -22,6 +22,12 @@ cp MasterPiece MasterPiece_SDL/
 cp -rf ../img/ MasterPiece_SDL/img/
 cd MasterPiece_SDL
 ./MasterPiece
+```
+
+or
+
+```bash
+./MasterPiece size 960 720
 ```
 
 ![image](https://github.com/user-attachments/assets/c33f737f-91e1-41d3-8be7-fff46d421872)
