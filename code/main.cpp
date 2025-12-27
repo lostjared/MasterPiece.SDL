@@ -633,6 +633,7 @@ int main(int argc, char *argv[])
         load(INTRO);
         mxhwnd.initLoop(render);
     }
+    SDL_Quit();
     return (0);
 }
 

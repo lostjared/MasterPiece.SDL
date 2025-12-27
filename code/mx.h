@@ -4,10 +4,10 @@
 
 #include<stdio.h>
 #include<stdlib.h>
-#include"SDL.h"
-#include"SDL_timer.h"
+#include"SDL2/SDL.h"
+#include"SDL2/SDL_timer.h"
 #include<assert.h>
-#include"SDL_ttf.h"
+#include"SDL2/SDL_ttf.h"
 #ifdef __EMSCRIPTEN__
 #include<emscripten/emscripten.h>
 #endif
@@ -30,8 +30,8 @@ public:
     SDL_Window *window;
     
     ~mxHwnd() {
-        SDL_FreeSurface(pscr);
-        SDL_Quit();
+//        SDL_FreeSurface(pscr);
+//        SDL_Quit();
     }
     
     SDL_Surface *pscr;
