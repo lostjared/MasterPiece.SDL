@@ -579,9 +579,10 @@ void render(int screen)
             pstart.update();
             break;
         case OPTIONS:
-            pstart.update(); // options is inside of start
+            pstart.update();
+            break;
         case CREDITS:
-            pstart.update(); // credits is inside of start
+            pstart.update();
             break;
         case HIGHSCORES:
             pstart.update(); // highscores is inside of start
@@ -620,7 +621,7 @@ void unload()
 int main(int argc, char *argv[])
 {
     
-    int width = 1440, height = 1080;
+    int width = 960, height = 720;
     
     if(argc == 4 && std::string(argv[1]) == "size") {
         width = atoi(argv[2]);

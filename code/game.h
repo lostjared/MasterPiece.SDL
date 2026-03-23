@@ -247,14 +247,13 @@ class Game  {
             cleartiles();
         }
         
-        // proccess the blocks, move them down (this occours, when a line is cleared )
         inline void ProccessBlocks()
         {
             for(int z = 0; z < 8; z++)
             {
                 for(int i = 0; i < 16; i++)
                 {
-                    if(Tiles[i][z] != 0 && Tiles[i+1][z] == 0)
+                    if(Tiles[i][z] > 0 && Tiles[i+1][z] == 0)
                     {
                         Tiles[i+1][z] = Tiles[i][z];
                         Tiles[i][z] = 0;
@@ -263,6 +262,21 @@ class Game  {
             }
         }
         
+        inline void flash_colors()
+        {
+            for(int i = 0; i < 17; i++)
+            {
+                for(int j = 0; j < 8; j++)
+                {
+                    if(Tiles[i][j] < 0)
+                    {
+                        Tiles[i][j]--;
+                        if(Tiles[i][j] < -1)
+                            Tiles[i][j] = 0;
+                    }
+                }
+            }
+        }
         
     };
     
@@ -318,198 +332,130 @@ class Game  {
     inline void logic()
     {
         static int wait = 0;
+        static unsigned int flash_tick = SDL_GetTicks();
         wait++;
         
-        if(wait > matrix.Game.speed )
+        if(wait > matrix.Game.speed)
         {
             wait = 0;
             matrix.block.MoveDown();
         }
         
+        if(SDL_GetTicks() - flash_tick > 1000)
+        {
+            matrix.flash_colors();
+            flash_tick = SDL_GetTicks();
+        }
         
         blockProc();
-        
     }
     
-    // disolve the block
-    void draweffect(int q, int p)
-    {
-        int px, py;
-        getcords(q,p,px,py);
-        for(int v = 0; v < 255; v++)
-            mxhwnd.setPixel(mxhwnd.pscr, px+rand()%grid_blocks[0].sptr->w, py+rand()%grid_blocks[0].sptr->h, 0x0);
-        //paint.drawRect(px,py,grid_blocks[0].sptr->w, grid_blocks[0].sptr->h, SDL_MapRGB(mxhwnd.pscr->format,rand()%255,rand()%255,rand()%255));
-        SDL_Delay(5);
-    }
-    
-    // proccess the blocks
     inline void blockProc()
     {
-        // are we at the bottom ?
-        if( matrix.block.y + 2 >= 16 )
+        if(matrix.block.y + 2 >= 16)
         {
             matrix.setblock();
             return;
         }
-        // did I run into another block?
-        if( matrix.Tiles[ matrix.block.y + 3][matrix.block.x] != 0 )
+        if(matrix.Tiles[matrix.block.y + 3][matrix.block.x] != 0)
         {
             matrix.setblock();
             return;
         }
-        
-        // now check and see if they are any 3 in a row going across
         
         for(int i = 0; i < 17; i++)
         {
-            for(int j = 0; j < 8-2; j++)
+            for(int j = 0; j < 8 - 2; j++)
             {
-                int cur_color;
-                cur_color = matrix.Tiles[ i ][ j ];
-                if(cur_color != BLOCK_BLACK)
+                int cur_color = matrix.Tiles[i][j];
+                if(cur_color > 0)
                 {
-                    
-                    if( matrix.Tiles [i][j+1] == cur_color && matrix.Tiles[i][j+2] == cur_color )
+                    if(matrix.Tiles[i][j+1] == cur_color && matrix.Tiles[i][j+2] == cur_color)
                     {
                         matrix.Game.addline();
-                        matrix.Tiles[i][j] = 0;
-                        matrix.Tiles[i][j+1] = 0;
-                        matrix.Tiles[i][j+2] = 0;
-                        for(int pq = 0; pq < 25; pq++)
-                        {
-                            draweffect(i,j);
-                            draweffect(i,j+1);
-                            draweffect(i,j+2);
-                            //SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
-                            SDL_UpdateWindowSurface(mxhwnd.window);
-                        }
+                        matrix.Tiles[i][j] = -1;
+                        matrix.Tiles[i][j+1] = -1;
+                        matrix.Tiles[i][j+2] = -1;
                         return;
                     }
-                    
                 }
-                
             }
         }
         
-        // now check and see if there are any 3 i a row going down
         for(int z = 0; z < 8; z++)
         {
-            for(int q = 0; q < 17-2; q++)
+            for(int q = 0; q < 17 - 2; q++)
             {
                 int cur_color = matrix.Tiles[q][z];
-                if( cur_color != BLOCK_BLACK )
+                if(cur_color > 0)
                 {
-                    
-                    if( matrix.Tiles[q+1][z] == cur_color && matrix.Tiles[q+2][z] == cur_color )
+                    if(matrix.Tiles[q+1][z] == cur_color && matrix.Tiles[q+2][z] == cur_color)
                     {
-                        matrix.Tiles[q][z]  = 0;
-                        matrix.Tiles[q+1][z] = 0;
-                        matrix.Tiles[q+2][z] = 0;
+                        matrix.Tiles[q][z] = -1;
+                        matrix.Tiles[q+1][z] = -1;
+                        matrix.Tiles[q+2][z] = -1;
                         matrix.Game.addline();
-                        for(int pq = 0; pq < 25; pq++)
-                        {
-                            draweffect(q,z);
-                            draweffect(q+1,z);
-                            draweffect(q+2,z);
-                            SDL_UpdateWindowSurface(mxhwnd.window);
-                        }
                         return;
                     }
                 }
             }
         }
         
-        //now lets see if we can find any diagnoal
         for(int p = 0; p < 8; p++)
         {
             for(int w = 0; w < 17; w++)
             {
-                int cur_color;
-                cur_color = matrix.Tiles[w][p];
-                
-                if(cur_color != 0 && cur_color != BLOCK_FADE)// we got a block ;]
+                int cur_color = matrix.Tiles[w][p];
+                if(cur_color > 0)
                 {
-                    // left
-                    if( matrix.Tiles [w+1][p+1] == cur_color && matrix.Tiles[w+2][p+2] == cur_color)
+                    if(w + 2 < 17 && p + 2 < 8)
                     {
-                        matrix.Tiles[w][p] = 0;
-                        matrix.Tiles[w+1][p+1] = 0;
-                        matrix.Tiles[w+2][p+2] = 0;
-                        matrix.Game.addline();
-                        for(int pq = 0; pq < 25; pq++)
+                        if(matrix.Tiles[w+1][p+1] == cur_color && matrix.Tiles[w+2][p+2] == cur_color)
                         {
-                            draweffect(w,p);
-                            draweffect(w+1,p+1);
-                            draweffect(w+2,p+2);
-                            SDL_UpdateWindowSurface(mxhwnd.window);
-                        }
-                    }
-                    if( w-2 >= 0 && p-2 >= 0)
-                    {
-                        
-                        if(matrix.Tiles [w-1][p-1] == cur_color && matrix.Tiles[w-2][p-2] == cur_color)
-                        {
-                            matrix.Tiles[w][p] = 0;
-                            matrix.Tiles[w-1][p-1] = 0;
-                            matrix.Tiles[w-2][p-2] = 0;
+                            matrix.Tiles[w][p] = -1;
+                            matrix.Tiles[w+1][p+1] = -1;
+                            matrix.Tiles[w+2][p+2] = -1;
                             matrix.Game.addline();
-                            for(int pq = 0; pq < 25; pq++)
-                            {
-                                draweffect(w,p);
-                                draweffect(w-1,p-1);
-                                draweffect(w-2,p-2);
-                                SDL_UpdateWindowSurface(mxhwnd.window);
-                            }
+                            return;
                         }
-                        
                     }
-                    
-                    if(w-2 >= 0)
+                    if(w - 2 >= 0 && p - 2 >= 0)
                     {
-                        
+                        if(matrix.Tiles[w-1][p-1] == cur_color && matrix.Tiles[w-2][p-2] == cur_color)
+                        {
+                            matrix.Tiles[w][p] = -1;
+                            matrix.Tiles[w-1][p-1] = -1;
+                            matrix.Tiles[w-2][p-2] = -1;
+                            matrix.Game.addline();
+                            return;
+                        }
+                    }
+                    if(w - 2 >= 0 && p + 2 < 8)
+                    {
                         if(matrix.Tiles[w-1][p+1] == cur_color && matrix.Tiles[w-2][p+2] == cur_color)
                         {
-                            matrix.Tiles[w][p] = 0;
-                            matrix.Tiles[w-1][p+1] = 0;
-                            matrix.Tiles[w-2][p+2] = 0;
+                            matrix.Tiles[w][p] = -1;
+                            matrix.Tiles[w-1][p+1] = -1;
+                            matrix.Tiles[w-2][p+2] = -1;
                             matrix.Game.addline();
-                            for(int pq = 0; pq < 25; pq++)
-                            {
-                                draweffect(w,p);
-                                draweffect(w-1,p+1);
-                                draweffect(w-2,p+2);
-                                SDL_UpdateWindowSurface(mxhwnd.window);
-                            }
+                            return;
                         }
-                        
                     }
-                    
-                    if(p-2 >= 0)
+                    if(w + 2 < 17 && p - 2 >= 0)
                     {
-                        
                         if(matrix.Tiles[w+1][p-1] == cur_color && matrix.Tiles[w+2][p-2] == cur_color)
                         {
-                            matrix.Tiles[w][p] = 0;
-                            matrix.Tiles[w+1][p-1] = 0;
-                            matrix.Tiles[w+2][p-2] = 0;
+                            matrix.Tiles[w][p] = -1;
+                            matrix.Tiles[w+1][p-1] = -1;
+                            matrix.Tiles[w+2][p-2] = -1;
                             matrix.Game.addline();
-                            for(int pq = 0; pq < 25; pq++)
-                            {
-                                draweffect(w,p);
-                                draweffect(w+1,p-1);
-                                draweffect(w+2,p-2);
-                                SDL_UpdateWindowSurface(mxhwnd.window);
-                            }
+                            return;
                         }
-                        
                     }
                 }
             }
-            
-            
         }
         matrix.ProccessBlocks();
-        
     }
     
     // draw the matrix
@@ -526,12 +472,11 @@ class Game  {
             
             for(int j = 0; j < 8; j++)
             {
-                if(matrix.Tiles[i][j] != BLOCK_FADE)
-                {
-                    if(matrix.Tiles[i][j] != BLOCK_BLACK)
-                        grid_blocks[matrix.Tiles[i][j]].display(x,y);
-                    x = x + 32;
-                }
+                if(matrix.Tiles[i][j] > 0)
+                    grid_blocks[matrix.Tiles[i][j]].display(x,y);
+                else if(matrix.Tiles[i][j] < 0)
+                    paint.drawRect(x, y, 32, 16, SDL_MapRGB(mxhwnd.pscr->format, rand()%255, rand()%255, rand()%255));
+                x = x + 32;
             }
             x = STARTPOSX;
             y = y + 16;
@@ -571,45 +516,27 @@ class Game  {
         switch(wParam)
         {
             case SDLK_LEFT:
-                if( matrix.block.x >= 1)
+                if(matrix.block.x >= 1)
                 {
-                    
-                    if( matrix.Tiles [ matrix.block.y ] [ matrix.block.x-1 ] == 0 && matrix.Tiles [ matrix.block.y + 1 ] [ matrix.block.x-1 ] == 0 && matrix.Tiles [ matrix.block.y  + 1 ] [ matrix.block.x-1 ] == 0 && matrix.Tiles [ matrix.block.y + 3] [ matrix.block.x-1 ] == 0)
+                    if(matrix.Tiles[matrix.block.y][matrix.block.x-1] == 0 && matrix.Tiles[matrix.block.y + 1][matrix.block.x-1] == 0 && matrix.Tiles[matrix.block.y + 2][matrix.block.x-1] == 0)
                     {
-                        
-                        //grid.HandleInput(wParam);
                         matrix.block.MoveLeft();
-                        
                     }
-                    
                 }
                 break;
             case SDLK_RIGHT:
-                if( matrix.block.x < 7)
+                if(matrix.block.x < 7)
                 {
-                    
-                    if( matrix.Tiles [ matrix.block.y ] [ matrix.block.x+1 ] == 0 && matrix.Tiles [ matrix.block.y + 1 ] [ matrix.block.x+1 ] == 0 && matrix.Tiles [ matrix.block.y  + 1 ] [ matrix.block.x+1 ] == 0 && matrix.Tiles [ matrix.block.y + 3] [ matrix.block.x+1 ] == 0)
+                    if(matrix.Tiles[matrix.block.y][matrix.block.x+1] == 0 && matrix.Tiles[matrix.block.y + 1][matrix.block.x+1] == 0 && matrix.Tiles[matrix.block.y + 2][matrix.block.x+1] == 0)
                     {
-                        
-                        //grid.HandleInput(wParam);
                         matrix.block.MoveRight();
-                        
                     }
-                    
                 }
                 break;
             case SDLK_DOWN:
-                //	grid.HandleInput(wParam);
-                if( matrix.Tiles [ matrix.block.y + 3 ][ matrix.block.x ] == 0 && matrix.block.y + 3 < 15 )
+                if(matrix.block.y + 2 < 16 && matrix.Tiles[matrix.block.y + 3][matrix.block.x] == 0)
                 {
-                    
-                    if(matrix.Tiles[ matrix.block.y + 4 ][ matrix.block.x ] == 0)
-                    {
-                        
-                        matrix.block.MoveDown();
-                        
-                    }
-                    
+                    matrix.block.MoveDown();
                 }
                 break;
             case SDLK_UP:

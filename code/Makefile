@@ -1,6 +1,6 @@
 OBJ=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
-CFLAGS= -std=c++11 `sdl2-config --cflags`
+CFLAGS= -std=c++11 -O3 `sdl2-config --cflags` 
 LDFLAGS= `sdl2-config --libs` -lSDL2_ttf
 PROGRAM=MasterPiece.SDL
 
