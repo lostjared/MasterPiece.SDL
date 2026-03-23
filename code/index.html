@@ -185,7 +185,7 @@
         <div class="action-btn btn-red"  data-key="a">A</div>
         <div class="action-btn btn-blue" data-key="s">S</div>
         <div class="utility-buttons">
-          <div class="utility-btn" data-key=" ">Space</div>
+          <div class="utility-btn" data-key="Escape">Esc</div>
           <div class="utility-btn" data-key="Enter">Enter</div>
         </div>
       </div>
@@ -282,12 +282,12 @@
       // Map of key strings → KeyboardEvent key codes
       var keyCodeMap = {
         'ArrowUp': 38, 'ArrowDown': 40, 'ArrowLeft': 37, 'ArrowRight': 39,
-        'a': 65, 's': 83, ' ': 32, 'Enter': 13
+        'a': 65, 's': 83, 'Escape': 27, 'Enter': 13
       };
 
       function fireKey(type, key) {
         var code = keyCodeMap[key] || 0;
-        var eventCode = key === ' ' ? 'Space' : (key.length === 1 ? 'Key' + key.toUpperCase() : key);
+        var eventCode = key === 'Escape' ? 'Escape' : (key.length === 1 ? 'Key' + key.toUpperCase() : key);
         var evt = new KeyboardEvent(type, {
           key: key,
           code: eventCode,
@@ -327,6 +327,6 @@
   </script>
   
   <!-- Load the Emscripten generated JavaScript file -->
-  <script src="MasterPiece.js?v=1.3x"></script>
+  <script src="MasterPiece.js?v=2.0x"></script>
 </body>
 </html>
