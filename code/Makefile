@@ -4,7 +4,7 @@ CFLAGS= -std=c++11 -O3 `sdl2-config --cflags`
 LDFLAGS= `sdl2-config --libs` -lSDL2_ttf
 PROGRAM=MasterPiece.SDL
 
-%.o: %.cpp
+%.o: %.cpp %.hpp
 	$(CXX) $(CFLAGS) $< -c -o $@
 
 $(PROGRAM): $(OBJ)

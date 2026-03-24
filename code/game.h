@@ -9,32 +9,16 @@ enum { BLOCK_BLACK = 0, BLOCK_YELLOW, BLOCK_ORANGE, BLOCK_LTBLUE, BLOCK_DBLUE, B
 
 // the game object
 const int BR  = 5;
-void getcords(int r, int c, int& rx, int& ry)
-{
-    int STARTPOSX = STARTX;
-    int STARTPOSY = STARTY;
-    int x = STARTPOSX,y = STARTPOSY;
-    for(int i = 0; i < 17; i++)
+void getcords(int r, int c, int& rx, int& ry) {
+    if (r < 0 || r >= 17 || c < 0 || c >= 8)
     {
-        for(int j = 0; j < 8; j++)
-        {
-            
-            if(r == i && c == j)
-            {
-                rx = x;
-                ry = y;
-                return;
-            }
-            x = x + 32;
-        }
-        x = STARTPOSX;
-        y = y + 16;
-        // down lower
+        rx = -1;
+        ry = -1;
+        return;
     }
-    rx = -1;
-    ry = -1;
+    rx = STARTX + (c * 32);
+    ry = STARTY + (r * 16);
 }
-
 // contains the game grid
 // which is were the game play occours
 class Game  {
