@@ -231,6 +231,21 @@ class Game  {
             cleartiles();
         }
         
+        static const int FLASH_STEPS = 3;
+
+        inline bool hasFlashing() const
+        {
+            for(int i = 0; i < 17; i++)
+            {
+                for(int j = 0; j < 8; j++)
+                {
+                    if(Tiles[i][j] < 0)
+                        return true;
+                }
+            }
+            return false;
+        }
+
         inline void ProccessBlocks()
         {
             for(int z = 0; z < 8; z++)
@@ -254,9 +269,11 @@ class Game  {
                 {
                     if(Tiles[i][j] < 0)
                     {
-                        Tiles[i][j]--;
-                        if(Tiles[i][j] < -1)
-                            Tiles[i][j] = 0;
+                        Tiles[i][j]++;
+                        if(Tiles[i][j] >= 0)
+                        {
+                            Tiles[i][j] = 0; // clear after full flash cycle
+                        }
                     }
                 }
             }
@@ -330,61 +347,63 @@ class Game  {
             matrix.flash_colors();
             flash_tick = SDL_GetTicks();
         }
-        
+
+        if(matrix.hasFlashing())
+        {
+            // wait until all flashing finish, then let gravity and block logic continue
+            return;
+        }
+
+        matrix.ProccessBlocks();
         blockProc();
     }
     
     inline void blockProc()
     {
-        if(matrix.block.y + 2 >= 16)
+        if(matrix.block.y + 2 >= 16 || matrix.Tiles[matrix.block.y + 3][matrix.block.x] != 0)
         {
             matrix.setblock();
             return;
         }
-        if(matrix.Tiles[matrix.block.y + 3][matrix.block.x] != 0)
-        {
-            matrix.setblock();
-            return;
-        }
-        
+
+        bool foundMatch = false;
+
         for(int i = 0; i < 17; i++)
         {
             for(int j = 0; j < 8 - 2; j++)
             {
                 int cur_color = matrix.Tiles[i][j];
-                if(cur_color > 0)
+                if(cur_color > 0
+                   && matrix.Tiles[i][j+1] == cur_color
+                   && matrix.Tiles[i][j+2] == cur_color)
                 {
-                    if(matrix.Tiles[i][j+1] == cur_color && matrix.Tiles[i][j+2] == cur_color)
-                    {
-                        matrix.Game.addline();
-                        matrix.Tiles[i][j] = -1;
-                        matrix.Tiles[i][j+1] = -1;
-                        matrix.Tiles[i][j+2] = -1;
-                        return;
-                    }
+                    matrix.Tiles[i][j] = -TileMatrix::FLASH_STEPS;
+                    matrix.Tiles[i][j+1] = -TileMatrix::FLASH_STEPS;
+                    matrix.Tiles[i][j+2] = -TileMatrix::FLASH_STEPS;
+                    matrix.Game.addline();
+                    foundMatch = true;
                 }
             }
         }
-        
+
         for(int z = 0; z < 8; z++)
         {
             for(int q = 0; q < 17 - 2; q++)
             {
                 int cur_color = matrix.Tiles[q][z];
-                if(cur_color > 0)
+                if(cur_color > 0
+                   && matrix.Tiles[q+1][z] == cur_color
+                   && matrix.Tiles[q+2][z] == cur_color)
                 {
-                    if(matrix.Tiles[q+1][z] == cur_color && matrix.Tiles[q+2][z] == cur_color)
-                    {
-                        matrix.Tiles[q][z] = -1;
-                        matrix.Tiles[q+1][z] = -1;
-                        matrix.Tiles[q+2][z] = -1;
-                        matrix.Game.addline();
-                        return;
-                    }
+                    matrix.Tiles[q][z] = -TileMatrix::FLASH_STEPS;
+                    matrix.Tiles[q+1][z] = -TileMatrix::FLASH_STEPS;
+                    matrix.Tiles[q+2][z] = -TileMatrix::FLASH_STEPS;
+                    matrix.Game.addline();
+                    foundMatch = true;
                 }
             }
         }
-        
+
         for(int p = 0; p < 8; p++)
         {
             for(int w = 0; w < 17; w++)
@@ -392,56 +411,54 @@ class Game  {
                 int cur_color = matrix.Tiles[w][p];
                 if(cur_color > 0)
                 {
-                    if(w + 2 < 17 && p + 2 < 8)
+                    if(w + 2 < 17 && p + 2 < 8
+                       && matrix.Tiles[w+1][p+1] == cur_color
+                       && matrix.Tiles[w+2][p+2] == cur_color)
                     {
-                        if(matrix.Tiles[w+1][p+1] == cur_color && matrix.Tiles[w+2][p+2] == cur_color)
-                        {
-                            matrix.Tiles[w][p] = -1;
-                            matrix.Tiles[w+1][p+1] = -1;
-                            matrix.Tiles[w+2][p+2] = -1;
-                            matrix.Game.addline();
-                            return;
-                        }
+                        matrix.Tiles[w][p] = -TileMatrix::FLASH_STEPS;
+                        matrix.Tiles[w+1][p+1] = -TileMatrix::FLASH_STEPS;
+                        matrix.Tiles[w+2][p+2] = -TileMatrix::FLASH_STEPS;
+                        matrix.Game.addline();
+                        foundMatch = true;
                     }
-                    if(w - 2 >= 0 && p - 2 >= 0)
+                    if(w - 2 >= 0 && p - 2 >= 0
+                       && matrix.Tiles[w-1][p-1] == cur_color
+                       && matrix.Tiles[w-2][p-2] == cur_color)
                     {
-                        if(matrix.Tiles[w-1][p-1] == cur_color && matrix.Tiles[w-2][p-2] == cur_color)
-                        {
-                            matrix.Tiles[w][p] = -1;
-                            matrix.Tiles[w-1][p-1] = -1;
-                            matrix.Tiles[w-2][p-2] = -1;
-                            matrix.Game.addline();
-                            return;
-                        }
+                        matrix.Tiles[w][p] = -TileMatrix::FLASH_STEPS;
+                        matrix.Tiles[w-1][p-1] = -TileMatrix::FLASH_STEPS;
+                        matrix.Tiles[w-2][p-2] = -TileMatrix::FLASH_STEPS;
+                        matrix.Game.addline();
+                        foundMatch = true;
                     }
-                    if(w - 2 >= 0 && p + 2 < 8)
+                    if(w - 2 >= 0 && p + 2 < 8
+                       && matrix.Tiles[w-1][p+1] == cur_color
+                       && matrix.Tiles[w-2][p+2] == cur_color)
                     {
-                        if(matrix.Tiles[w-1][p+1] == cur_color && matrix.Tiles[w-2][p+2] == cur_color)
-                        {
-                            matrix.Tiles[w][p] = -1;
-                            matrix.Tiles[w-1][p+1] = -1;
-                            matrix.Tiles[w-2][p+2] = -1;
-                            matrix.Game.addline();
-                            return;
-                        }
+                        matrix.Tiles[w][p] = -TileMatrix::FLASH_STEPS;
+                        matrix.Tiles[w-1][p+1] = -TileMatrix::FLASH_STEPS;
+                        matrix.Tiles[w-2][p+2] = -TileMatrix::FLASH_STEPS;
+                        matrix.Game.addline();
+                        foundMatch = true;
                     }
-                    if(w + 2 < 17 && p - 2 >= 0)
+                    if(w + 2 < 17 && p - 2 >= 0
+                       && matrix.Tiles[w+1][p-1] == cur_color
+                       && matrix.Tiles[w+2][p-2] == cur_color)
                     {
-                        if(matrix.Tiles[w+1][p-1] == cur_color && matrix.Tiles[w+2][p-2] == cur_color)
-                        {
-                            matrix.Tiles[w][p] = -1;
-                            matrix.Tiles[w+1][p-1] = -1;
-                            matrix.Tiles[w+2][p-2] = -1;
-                            matrix.Game.addline();
-                            return;
-                        }
+                        matrix.Tiles[w][p] = -TileMatrix::FLASH_STEPS;
+                        matrix.Tiles[w+1][p-1] = -TileMatrix::FLASH_STEPS;
+                        matrix.Tiles[w+2][p-2] = -TileMatrix::FLASH_STEPS;
+                        matrix.Game.addline();
+                        foundMatch = true;
                     }
                 }
             }
         }
-        matrix.ProccessBlocks();
+
+        if(foundMatch)
+            return;
     }
-    
+
     // draw the matrix
     inline void drawmatrix()
     {
