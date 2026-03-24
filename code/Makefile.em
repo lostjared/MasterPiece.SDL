@@ -15,5 +15,5 @@ all: $(PROGRAM)
 
 .PHONY: clean clear
 clean:
-	rm -f $(PROGRAM) *.html *.js *.wasm *.data *.o
+	rm -f $(PROGRAM) MasterPiece.html *.js *.wasm *.data *.o
 
