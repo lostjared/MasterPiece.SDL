@@ -2,22 +2,28 @@
 #include "theheader.h"
 // From an another game I wrote, minor changes
 
-enum { D_DOWN = 1,
-       D_UP = 2 };
-enum { STARTX = 185,
-       STARTY = 95 };
-enum { BLOCK_BLACK = 0,
-       BLOCK_YELLOW,
-       BLOCK_ORANGE,
-       BLOCK_LTBLUE,
-       BLOCK_DBLUE,
-       BLOCK_PURPLE,
-       BLOCK_PINK,
-       BLOCK_GRAY,
-       BLOCK_RED,
-       BLOCK_GREEN,
-       BLOCK_CLEAR,
-       BLOCK_FADE };
+enum {
+    D_DOWN = 1,
+    D_UP = 2
+};
+enum {
+    STARTX = 185,
+    STARTY = 95
+};
+enum {
+    BLOCK_BLACK = 0,
+    BLOCK_YELLOW,
+    BLOCK_ORANGE,
+    BLOCK_LTBLUE,
+    BLOCK_DBLUE,
+    BLOCK_PURPLE,
+    BLOCK_PINK,
+    BLOCK_GRAY,
+    BLOCK_RED,
+    BLOCK_GREEN,
+    BLOCK_CLEAR,
+    BLOCK_FADE
+};
 
 // the game object
 const int BR = 5;
