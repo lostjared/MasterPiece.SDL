@@ -5,19 +5,19 @@ extern mxPaint paint;
 extern mxFont font;
 extern int linenum;
 
-extern const char* getPath(const char*);
+extern const char *getPath(const char *);
 extern void gameover();
 
-#include"mx.h"
-#include<cstring>
-#include<cstdlib>
-#include<ctime>
-#include<fstream>
-#include<sstream>
+#include "mx.h"
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 #ifndef _WIN32
-#include<unistd.h>
+#include <unistd.h>
 #endif
 
 #define INTRO 1
